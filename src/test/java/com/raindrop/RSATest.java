@@ -23,11 +23,11 @@ public class RSATest {
 	// }
 
 	public static void main(String[] args) throws Exception {
-//		test4();
+		test4();
 		// test3();
 		// test2();
 //		 test();
-		test5();
+//		test5();
 	}
 
 	static void test5() throws Exception {
