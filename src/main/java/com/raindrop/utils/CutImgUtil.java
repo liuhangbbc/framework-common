@@ -40,13 +40,7 @@ public class CutImgUtil {
 	// ===剪切图片存放路径名称。如：c:\2.jpg
 	private String subpath;
 
-	public void setSrcpath(String srcpath) {
-		this.srcpath = srcpath;
-	}
-
-	public void setSubpath(String subpath) {
-		this.subpath = subpath;
-	}
+	private String fileName;
 
 	public CutImgUtil() {
 	}
@@ -81,6 +75,42 @@ public class CutImgUtil {
 		this.width = width;
 		this.height = height;
 		this.suffix = srcpath.substring(srcpath.lastIndexOf(".") + 1);
+	}
+
+	public CutImgUtil(int x, int y, int width, int height, String srcpath,
+			String subpath) {
+		super();
+		if (x < 0) {
+			x = 0;
+		} else {
+			this.x = x;
+		}
+		if (y < 0) {
+			y = 0;
+		} else {
+			this.y = y;
+		}
+		this.width = width;
+		this.height = height;
+		this.suffix = srcpath.substring(srcpath.lastIndexOf(".") + 1);
+		this.fileName = "UP_IMAGE_" + System.currentTimeMillis() + "." + suffix;
+		this.subpath = subpath + "/" + fileName;
+	}
+
+	public void setSrcpath(String srcpath) {
+		this.srcpath = srcpath;
+	}
+
+	public void setSubpath(String subpath) {
+		this.subpath = subpath;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	/**
@@ -264,8 +294,10 @@ public class CutImgUtil {
 	}
 
 	public File cute(InputStream inputStream) throws Exception {
+		// 读取图片文件
+		FileInputStream is = (FileInputStream) (inputStream);
+		ImageInputStream iis = null;
 		try {
-
 			/**
 			 * 
 			 * 对输入流进行整理通过inputStream进行输入
@@ -299,7 +331,9 @@ public class CutImgUtil {
 			 *
 			 * 避免缓存包含与以前已经读取的图像关联的数据的那些输入部分。
 			 */
-			reader.setInput(inputStream, true);
+			// 获取图片流
+			iis = ImageIO.createImageInputStream(is);
+			reader.setInput(iis, true);
 
 			/**
 			 *
@@ -337,7 +371,7 @@ public class CutImgUtil {
 
 			// 保存新图片
 			ImageIO.write(bi, suffix, new File(subpath));
-			File file = new File("subpath");
+			File file = new File(subpath);
 			return file;
 		} catch (IOException e) {
 			throw new IOException(e);
